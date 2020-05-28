@@ -445,6 +445,5 @@ Block*** Create::normal()
 
 		DestoryList(newhead);//销毁临时链表
 	}
-
 	return blocks;
 }
