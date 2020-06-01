@@ -447,3 +447,306 @@ Block*** Create::normal()
 	}
 	return blocks;
 }
+
+////////////////////////////////////////////////////
+/////         生成难度等级hard              /////
+/////         方块种类数：7                 //////
+/////////////////////////////////////////////////
+Block*** Create::hard()
+{
+	Block*** blocks = NULL;
+	blocks = (Block***)malloc(sizeof(Block**) * this->weight);
+
+	for (int i = 0; i < this->weight; i++)
+	{
+		blocks[i] = (Block**)malloc(sizeof(Block*) * this->height);
+		for (int j = 0; j < this->height; j++)
+		{
+			blocks[i][j] = (Block*)malloc(sizeof(Block) * this->height * this->weight);
+
+			blocks[i][j]->num = -1;
+			blocks[i][j]->x = i;
+			blocks[i][j]->y = j;
+			blocks[i][j]->mask = 0;
+		}
+	}
+	ListNode* allhead = new ListNode;
+	allhead = createList(blocks);
+
+	while (getLength(allhead) != 0)
+	{
+		ListNode* newhead = new ListNode;
+		newhead->block = NULL;
+		newhead->next = NULL;
+
+		ListNode* newhead1 = new ListNode;
+		newhead1->block = NULL;
+		newhead1->next = NULL;
+
+		ListNode* newhead2 = new ListNode;
+		newhead2->block = NULL;
+		newhead2->next = NULL;
+
+		ListNode* newhead3 = new ListNode;
+		newhead3->block = NULL;
+		newhead3->next = NULL;
+
+		ListNode* newhead4 = new ListNode;
+		newhead4->block = NULL;
+		newhead4->next = NULL;
+
+		int aim = (rand() % (getLength(allhead) - 1 + 1)) + 1;
+
+		ListNode* node = new ListNode;
+		node->block = NULL;
+		node->next = NULL;
+
+		node = deleteNode1(allhead, aim);//取一个空方块
+		int number = (rand() % (7 - 1 + 1)) + 1;//生成随机数：(rand() % (b - a + 1)) + a;
+
+		blocks[node->block->x][node->block->y]->mask = 1;
+		blocks[node->block->x][node->block->y]->num = number;
+
+		//将当前方块的同一行的空方块加入新链表
+		for (int i = node->block->x + 1; i < this->weight; i++)
+		{
+			if (blocks[i][node->block->y]->mask == 0)
+			{
+				addNode(newhead1, blocks[i][node->block->y]);
+			}
+
+			else
+			{
+				break;
+			}
+		}
+
+		for (int i = node->block->x - 1; i > -1; i--)
+		{
+			if (blocks[i][node->block->y]->mask == 0)
+			{
+				addNode(newhead1, blocks[i][node->block->y]);
+			}
+
+			else
+			{
+				break;
+			}
+		}
+		//将当前方块的同一列的空方块加入新链表
+		for (int i = node->block->y + 1; i < this->height; i++)
+		{
+			if (blocks[node->block->x][i]->mask == 0)
+			{
+				addNode(newhead2, blocks[node->block->x][i]);
+			}
+
+			else
+			{
+				break;
+			}
+		}
+
+		for (int i = node->block->y - 1; i > -1; i--)
+		{
+			if (blocks[node->block->x][i]->mask == 0)
+			{
+				addNode(newhead2, blocks[node->block->x][i]);
+			}
+
+			else
+			{
+				break;
+			}
+		}
+
+		while (getLength(newhead1) != 0)
+		{
+			node = deleteNode1(newhead1, 1);
+			for (int i = node->block->y + 1; i < this->height; i++)
+			{
+				if (blocks[node->block->x][i]->mask == 0)
+				{
+					addNode(newhead3, blocks[node->block->x][i]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+
+			for (int i = node->block->y - 1; i > -1; i--)
+			{
+				if (blocks[node->block->x][i]->mask == 0)
+				{
+					addNode(newhead3, blocks[node->block->x][i]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+		}
+		DestoryList(newhead1);
+
+		while (getLength(newhead2) != 0)
+		{
+			node = deleteNode1(newhead2, 1);
+			for (int i = node->block->x + 1; i < this->weight; i++)
+			{
+				if (blocks[i][node->block->y]->mask == 0)
+				{
+					addNode(newhead4, blocks[i][node->block->y]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+
+			for (int i = node->block->x - 1; i > -1; i--)
+			{
+				if (blocks[i][node->block->y]->mask == 0)
+				{
+					addNode(newhead4, blocks[i][node->block->y]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+		}
+		DestoryList(newhead2);
+
+		while (getLength(newhead3) != 0)
+		{
+			node = deleteNode1(newhead3, 1);
+			for (int i = node->block->x + 1; i < this->weight; i++)
+			{
+				if (blocks[i][node->block->y]->mask == 0)
+				{
+					addNode(newhead, blocks[i][node->block->y]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+
+			for (int i = node->block->x - 1; i > -1; i--)
+			{
+				if (blocks[i][node->block->y]->mask == 0)
+				{
+					addNode(newhead, blocks[i][node->block->y]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+		}
+		DestoryList(newhead3);
+
+		
+		while (getLength(newhead4) != 0)
+		{
+			node = deleteNode1(newhead4, 1);
+			for (int i = node->block->y + 1; i < this->height; i++)
+			{
+				if (blocks[node->block->x][i]->mask == 0)
+				{
+					addNode(newhead, blocks[node->block->x][i]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+
+			for (int i = node->block->y - 1; i > -1; i--)
+			{
+				if (blocks[node->block->x][i]->mask == 0)
+				{
+					addNode(newhead, blocks[node->block->x][i]);
+				}
+
+				else
+				{
+					break;
+				}
+			}
+		}
+		DestoryList(newhead4);
+
+		//从临时链表里取第二个方块，并从主链表中删除
+		if (getLength(newhead) != 0)
+		{
+			aim = (rand() % (getLength(newhead) - 1 + 1)) + 1;//生成随机数：(rand() % (b - a + 1)) + a;
+			node = deleteNode1(newhead, aim);
+			deleteNode2(allhead, node->block->x, node->block->y);
+
+			blocks[node->block->x][node->block->y]->mask = 1;
+			blocks[node->block->x][node->block->y]->num = number;
+		}
+
+		else
+		{
+			aim = (rand() % (getLength(allhead) - 1 + 1)) + 1;
+			node = deleteNode1(allhead, aim);
+
+			blocks[node->block->x][node->block->y]->mask = 1;
+			blocks[node->block->x][node->block->y]->num = number;
+		}
+
+		DestoryList(newhead);//销毁临时链表
+	}
+
+	return blocks;
+}
+
+Block*** Create::reset(Block*** blocks)
+{
+	ListNode* head = new ListNode;
+	head->block = NULL;
+	head->next = NULL;
+
+	for (int i = 0; i < this->weight; i++)
+	{
+		for (int j = 0; j < this->height; j++)
+		{
+			if (blocks[i][j]->mask != 0)
+			{
+				addNode(head, blocks[i][j]);
+			}
+		}
+	}
+
+	while (getLength(head) != 0)
+	{
+		ListNode* node1 = new ListNode;
+		ListNode* node2 = new ListNode;
+
+		int aim = (rand() % (getLength(head) - 1 + 1)) + 1;//生成随机数：(rand() % (b - a + 1)) + a;
+		node1 = deleteNode1(head, aim);
+
+		aim = (rand() % (getLength(head) - 1 + 1)) + 1;//生成随机数：(rand() % (b - a + 1)) + a;
+		node2 = deleteNode1(head, aim);
+
+		int x = 0;
+		x = node1->block->num;
+		node1->block->num = node2->block->num;
+		node2->block->num = x;
+
+		blocks[node1->block->x][node1->block->y]->num = node1->block->num;
+		blocks[node2->block->x][node2->block->y]->num = node2->block->num;
+	}
+
+	return blocks;
+}
