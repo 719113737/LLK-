@@ -176,4 +176,13 @@ bool auto_deal() {
 		}
 	}
 }
-
+int main() {
+	init();
+	//dfs(1, 1, -1, 0);
+	if (auto_deal()) {
+		std::cout << "yes";
+	}
+	else {
+		std::cout << "no";
+	}
+}
