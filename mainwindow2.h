@@ -5,7 +5,20 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
+#include "queuetemp.h"
+#include "queue1.h"
+#include "create.h"
+#include <QMessageBox>
+#define num1 8
+#define num2 10
 
+struct position
+{
+    int x;
+    int y;
+};
+
+typedef struct position Posi;
 namespace Ui {
 class MainWindow2;
 }
@@ -18,6 +31,9 @@ public:
     explicit MainWindow2(QWidget *parent = nullptr);
     ~MainWindow2();
     void startgame();
+    void easy();
+    void normal();
+    void hard();
 
 private slots:
     void gotoFirstwindow(bool);
@@ -186,6 +202,14 @@ private slots:
 
     void getTimeNum();
 
+    void on_pushButton_83_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_84_clicked();
+
+    void on_pushButton_2_clicked();
+
 signals:
     void gotoFirstWindow1();
 
@@ -195,8 +219,30 @@ private:
     int firstChoosex = -1;
     int firstChoosey = -1;
     QPushButton *qPushButton1;
+    QPushButton *qPushButton2;
     int count1 = 60;
     QTimer qtimer1;
+    int picOrder[8][10];
+    int matrix[num1][num2];
+    int visitedNumber[num1][num2];
+    Posi prev[num1][num2];
+    QueueTemp queueOrder[num1][num2];
+    void init();
+    int canConnect(int a,int b,int c,int d);
+    string getPicTypeName(int order);
+    string getPicTypeName2(int order);
+    Create* create1;
+    QIcon getQicon(int picOrder2);
+    QPushButton* getPushButton(int x, int y);
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+    void hint();
+    void getTips();
+    Block*** tempBlock1;
+    void reSet();
+    int count2 = 0;
 };
 
 #endif // MAINWINDOW2_H
